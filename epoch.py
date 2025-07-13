@@ -16,10 +16,10 @@ def DCOS(x):
 def DTAN(x):
     return math.tan((x)*DEGTORAD)
 
-def epoch(rin, din, ein, eout):
+def precess(rin, din, ein, eout):
     t2 = ( (ein+eout)/2.0 - 1900.0 ) / 100.0
-    x = 3.07234 + (.00186 * t2)
-    y = 20.0468 - (.0085 * t2)
+    x = 3.07234 + (0.00186 * t2)
+    y = 20.0468 - (0.0085 * t2)
     z = y/15.0
     t = eout-ein
     w = 1.008 * t * (x + (z * DSIN(rin*15.0) * DTAN(din)) )
@@ -31,3 +31,11 @@ def epoch(rin, din, ein, eout):
         rout += 24.0
     dout = din + d/60.0
     return (rout,dout)
+
+
+if __name__ == '__main__':
+    ra=11.076857359492635
+    de=6.855224313947309
+    print("ra_date=",ra,"de_date=",de)
+    ra_2000,de_2000=precess(ra,de,2025.5,2000.0)
+    print("ra_2000=",ra_2000,"de_2000=",de_2000)

@@ -71,7 +71,7 @@ def moon(t):
   epoch=Epoch(t)
   ra, dec, Delta, ppi = Moon.apparent_equatorial_pos(epoch)
   Lambda, Beta, Delta, ppi = Moon.geocentric_ecliptical_pos(epoch)
-  distance = Delta
+  distance = Delta/149597871.0 #in AUs
   long,lat = hor.get_location()
   latitude=Angle(lat)
   ta=hor.taika(t)
@@ -81,9 +81,9 @@ def moon(t):
   return(top_ra/15.0,top_dec)
 
 if __name__ == '__main__':
-  print("Mars:")
-  t=hor.tojd(2025,1,27,18,30,00)
-  r,d=mars(t)
+  print("Mercury:")
+  t=hor.tojd(2025,7,12,16,15,00)
+  r,d=mercury(t)
   print("r=",r/15.0,"d=",d)
 
   right_ascension = Angle(22, 38, 7.25, ra=True)

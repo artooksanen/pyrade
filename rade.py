@@ -6,6 +6,7 @@ import kohdeluettelo
 import hor
 import planets
 import telescope
+import epoch
 
 screen=curses.initscr()
 lwhite=1
@@ -59,8 +60,8 @@ def aja(r,d):
   printrs(3,10,red,blue,"**ajetaan kohteeseen**                            ")
   telescope.slew(r,d)
 
-def epoch(r,d,e1,e2):
-  return (r,d)
+def epookki(r,d,e1,e2):
+  return epoch.precess(r,d,e1,e2)
 
 def printrs(c,r,col1,col2,s):
   screen.addstr(r, c, s)
@@ -100,7 +101,7 @@ def update_screen():
 def update_coord(i):
   global t
   (ra,de)=get_coord()                        # luetaan koordinaatit
-  (ra1,de1)=epoch(ra,de,epookki0,epookki1)
+  (ra1,de1)=epookki(ra,de,epookki0,epookki1)
   h=hms.rh(ra1)
   m=hms.rm(ra1)
   s=hms.rs(ra1)
@@ -181,42 +182,54 @@ def komennot():
    printrs(17,20,white,blue,"ohjelman lopetus")
 
 def kohde(s):
+   ut=datetime.utcnow()
+   year=ut.year
    nimi=""
    ra=de=0.0
    l=kohdeluettelo.searchndx(s.upper())
    if l>-1:
       (nimi,ra,de,l)=kohdeluettelo.readndx(l)
       return (nimi,ra,de,l)
-   if s=="Merkurius":
+   if s=="MERKURIUS":
      nimi="Merkurius"
      ra,de=planets.mercury(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="VENUS":
      nimi="Venus"
      ra,de=planets.venus(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="MARS":
      nimi="MARS"
      ra,de=planets.mars(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="JUPITER":
      nimi="Jupiter"
      ra,de=planets.jupiter(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="SATURNUS":
      nimi="Saturnus"
      ra,de=planets.saturn(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="URANUS":
      nimi="Uranus"
      ra,de=planets.uranus(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="NEPTUNUS":
      nimi="Neptunus"
      ra,de=planets.neptune(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="PLUTO":
      nimi="Pluto"
      ra,de=planets.pluto(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="AURINKO":
      nimi="AURINKO"
      ra,de=planets.sun(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="KUU":
      nimi="KUU"
      ra,de=planets.moon(t)
+     ra,de=epoch.precess(ra,de,year,2000.0)
    elif s=="ETELA":
      nimi="ETELA"
      ra,de=hor.hortoeq(180.0,0.0,t)
