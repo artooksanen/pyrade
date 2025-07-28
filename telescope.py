@@ -1,11 +1,16 @@
 import time
 from alpaca.telescope import *      # Multiple Classes including Enumerations
-from alpaca.exceptions import *     # Or just the exceptions you want to catch
+from alpaca.exceptions import *
+import requests     # Or just the exceptions you want to catch
 
 
-T = Telescope('192.168.8.2:5555', 0) # Alpyca eth0
+#T = Telescope('192.168.8.2:5555', 0) # rihlaperä 
 #T = Telescope('192.168.8.102:5555', 0) # Alpyca wifi
 #T = Telescope('192.168.8.100:5555', 0) # Alpyca
+
+#192.168.8.103:11111
+T = Telescope('192.168.8.103:11111', 0) # sky_simulator
+
 
 ra=0.0
 de=0.0
@@ -25,6 +30,9 @@ def slew(r,d):
 
 def slewing():
   return T.Slewing
+
+def tracking():
+  return T.Tracking
 
 def abort():
   T.AbortSlew()

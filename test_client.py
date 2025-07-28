@@ -1,15 +1,11 @@
-from alpaca.telescope import *      # Multiple Classes including Enumerations
+import time
+from alpaca.telescope import *
 
-T = Telescope('192.168.8.102:5555', 0) # Alpyca
-
-T.Connect()                         # New async connect
-print(f'Connected to {T.Name}',T.Connected)
-print(T.Description)
-
+T = Telescope('192.168.8.103:11111', 0) 
+#T.Connect()                       
+#while T.Connecting:
+#    time.sleep(1)
 ra=T.RightAscension
-print("RA=",ra)  
-
 de=T.Declination
-print("de=",de)  
-
-T.Disconnect()
+print("ra=",ra,"de=",de)
+#T.Disconnect()  
