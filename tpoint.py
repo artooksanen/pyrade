@@ -1,5 +1,7 @@
 from math import *
 
+IH=ID=NP=CH=MA=ME=0
+
 def sec(x):
     return 1.0/cos(x) 
 
@@ -9,7 +11,6 @@ def read_model(fname):
    """
    global modelname
    global IH,ID,NP,CH,MA,ME
-   IH=ID=NP=CH=MA=ME=0
    f = open(fname, 'r')
    modelname=f.readline()
    refraction=f.readline()
@@ -32,6 +33,7 @@ def read_model(fname):
    return(1)
 
 def print_model():
+   global IH,ID,NP,CH,MA,ME
    print("Model:",modelname)
    print("IH=",IH)
    print("ID=",ID)
@@ -45,6 +47,7 @@ def correction(h,d):
       returns tpoint hour angle and declination correction
       parameters are in radians
       """
+      global IH,ID,NP,CH,MA,ME
 
       dh = 0.0
       dh +=   IH
@@ -75,7 +78,7 @@ def corrected(h,d):
       return (ht,dt)
 
 
-read_model('tpoint-model.dat')
+#read_model('tpoint-model.dat')
 
 if __name__=="__main__":
 

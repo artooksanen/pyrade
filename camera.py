@@ -5,7 +5,7 @@ from alpaca.camera import *     # Sorry Python purists, this has multiple requir
 import numpy as np
 import astropy.io.fits as fits
 
-def take_image(exposure_time,ra,de,pixel_scale):
+def take_image(target_name,exposure_time,ra,de,pixel_scale):
 #
 # Set up the camera
 #
@@ -24,7 +24,7 @@ def take_image(exposure_time,ra,de,pixel_scale):
     c.StartExposure(exposure_time, True)
     while not c.ImageReady:
         time.sleep(1.0)
-        print(f'{c.PercentCompleted}% complete')
+#        print(f'{c.PercentCompleted}% complete')
     print('finished')
 #
 # OK image acquired, grab the image array and the metadata
@@ -112,7 +112,7 @@ def take_image(exposure_time,ra,de,pixel_scale):
 #
     hdu = fits.PrimaryHDU(nda, header=hdr)
 
-    img_file = 'test.fts'
+    img_file = target_name+".fit"
     hdu.writeto(img_file, overwrite=True)
     c.Connected = False
 

@@ -14,7 +14,8 @@ blue=2
 white=3
 yellow=4
 red=5
-epookki0=epookki1=2000.0
+epookki0=2000.0
+epookkinyt=2025.5
 t=0.0
 last_second=0
 
@@ -101,7 +102,7 @@ def update_screen():
 def update_coord(i):
   global t
   (ra,de)=get_coord()                        # luetaan koordinaatit
-  (ra1,de1)=epookki(ra,de,epookki0,epookki1)
+  (ra1,de1)=epookki(ra,de,epookkinyt,epookki0)
   h=hms.rh(ra1)
   m=hms.rm(ra1)
   s=hms.rs(ra1)
@@ -258,7 +259,8 @@ def main(stdscr):
               (nimi,ra,de,l) = kohde(k)
               tiedot(nimi,ra,de,l)
               printrs(3,10,red,blue,"** asteteaan koordinaatit **       "+k)
-              telescope.sync(ra,de)
+              (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
+              telescope.sync(ra_now,de_now)
         if komento=="LO":
            telescope.disconnect()
            break
@@ -266,7 +268,8 @@ def main(stdscr):
         if l>-1:
            (nimi,ra,de,ptr)=kohdeluettelo.readndx(l)
            tiedot(nimi,ra,de,ptr)
-           aja(ra,de)
+           (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
+           aja(ra_now,de_now)
         if komento[0]=='?':
           k=komento[1:].strip()
           l=-1
@@ -279,7 +282,8 @@ def main(stdscr):
         (nimi,ra,de,l) = kohde(komento)
         if(nimi!=""):
           tiedot(nimi,ra,de,l)
-          aja(ra,de)
+          (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
+          aja(ra_now,de_now)
     #telescope.disconnect()
 
 curses.wrapper(main)

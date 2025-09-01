@@ -39,3 +39,5 @@ if __name__ == '__main__':
     print("ra_date=",ra,"de_date=",de)
     ra_2000,de_2000=precess(ra,de,2025.5,2000.0)
     print("ra_2000=",ra_2000,"de_2000=",de_2000)
+    ra_now,de_now=precess(ra_2000,de_2000,2000.0,2025.5)
+    print("ra_date=",ra_now,"de_date=",de_now)
