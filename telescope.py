@@ -13,6 +13,8 @@ T = Telescope('192.168.8.2:5555', 0) # rihlaperä
 #192.168.8.103:11111
 #T = Telescope('192.168.8.103:11111', 0) # sky_simulator with 5 arc min elevation error
 
+target_ra=0.0
+target_de=0.0
 
 ra=0.0
 de=0.0
@@ -30,6 +32,9 @@ def connect():
 
 
 def slew(r,d):
+   global target_ra,target_de
+   target_ra=r
+   target_de=d
    print('Starting slew...')
    t=hor.ttojd(time.time())
    ta=hor.taika(t)
@@ -37,6 +42,9 @@ def slew(r,d):
    (h1,d1)=tpoint.uncorrected(radians(h),radians(d))
    r1=ta-degrees(h1)/15.0 #hours
    T.SlewToCoordinatesAsync(r1, degrees(d1))
+
+def get_target_coordinates():
+  return (target_ra,target_de)
 
 def slewing():
   return T.Slewing
@@ -79,8 +87,17 @@ def declination():
   finally:
     return de  
 
+def uncorrected_coordinates():
+  return (T.RightAscension,T.Declination)
+
 def sync(r,d):
-   T.SyncToCoordinates(r,d)
+  t=hor.ttojd(time.time())
+  ta=hor.taika(t)
+  h=(ta-r)*15.0 #degrees
+  (h1,d1)=tpoint.uncorrected(radians(h),radians(d))
+  r1=ta-degrees(h1)/15.0 #hours
+  T.SlewToCoordinatesAsync(r1, degrees(d1))
+  T.SyncToCoordinates(r,degrees(d1))
 
 def disconnect():
    print("Disconnecting...")

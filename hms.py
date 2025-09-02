@@ -16,6 +16,10 @@ def rs(h):
 def rs(h):
   return int((h-rh(h)-rm(h)/60.0)*3600.0)
 
+#ra sekunnit desimaaleina
+def rsd(h):
+  return (h-rh(h)-rm(h)/60.0)*3600.0
+
 #de etumerkki +/-
 def ds(d):
   if d<0:
@@ -35,8 +39,13 @@ def dm(d):
 
 #de sekunnit
 def dss(d):
-  a=(abs(d)-da(d)-dm(d)/60.0)*3600;
+  a=(abs(d)-da(d)-dm(d)/60.0)*3600
   return int(a)
+
+#de sekunnit desimaaleina
+def dssd(d):
+  a=(abs(d)-da(d)-dm(d)/60.0)*3600
+  return a
 
 
 def hhmmss(h):

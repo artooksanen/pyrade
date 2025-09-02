@@ -18,6 +18,7 @@ epookki0=2000.0
 epookkinyt=2025.5
 t=0.0
 last_second=0
+tf=None
 
 def input():
   global last_second
@@ -264,6 +265,8 @@ def main(stdscr):
         if komento=="LO":
            telescope.disconnect()
            break
+        if komento=="TPOINT":
+           save_tpoint()
         l=kohdeluettelo.searchndx(komento)
         if l>-1:
            (nimi,ra,de,ptr)=kohdeluettelo.readndx(l)
@@ -285,5 +288,30 @@ def main(stdscr):
           (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
           aja(ra_now,de_now)
     #telescope.disconnect()
+
+def save_tpoint():
+  global t,tf
+  if(tf==None): 
+    tf=open("rade_tpoint.dat","w",buffering=1)
+    tf.write("pyrade\n")
+    ut=datetime.utcnow()
+    pvm=ut.strftime('%Y %m %d')
+    #62 13 01.2 2025 4 1 0 1000 100 0.5 0.55
+    buffer="{:s}{:02d} {:02d} {:02.1f} {:s} 0 1000 100 0.5 0.55\n".format(hms.ds(hor.leveys),hms.da(hor.leveys),hms.dm(hor.leveys),hms.dssd(hor.leveys),pvm)
+    tf.write(buffer)
+  (r1,d1)=telescope.get_target_coordinates() 
+  (r1_2000,d1_2000)=epoch.precess(r1,d1,epookkinyt,2000.0)
+  ta=hor.taika(t)
+  (r0,d0)=telescope.uncorrected_coordinates()
+  (r0_2000,d0_2000)=epoch.precess(r0,d0,epookkinyt,2000.0)
+
+  buffer="{:02d} {:02d} {:02.1f} {:s}{:02d} {:02d} {:02d}.0 {:02d} {:02d} {:02.1f} {:s}{:02d} {:02d} {:02d}.0 {:02d} {:02d}\n".format(
+         hms.rh(r1_2000),hms.rm(r1_2000),hms.rsd(r1_2000),hms.ds(d1_2000),hms.da(d1_2000),hms.dm(d1_2000),hms.dss(1_2000),
+         hms.rh(r0_2000),hms.rm(r0_2000),hms.rsd(r0_2000),hms.ds(d0_2000),hms.da(d0_2000),hms.dm(d0_2000),hms.dss(d0_2000),
+         hms.rh(ta),hms.rm(ta))
+  if(tf):
+    tf.write(buffer)
+    printrs(3,10,red,blue,"tallettu koordinaatit rade_tpoint.dat tiedostoon                     ");
+
 
 curses.wrapper(main)
