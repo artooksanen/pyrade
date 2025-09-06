@@ -262,18 +262,21 @@ def main(stdscr):
               printrs(3,10,red,blue,"** asteteaan koordinaatit **       "+k)
               (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
               telescope.sync(ra_now,de_now)
+              komento=""
+              nimi=""
         if komento=="LO":
            telescope.disconnect()
            break
         if komento=="TPOINT":
            save_tpoint()
-        l=kohdeluettelo.searchndx(komento)
-        if l>-1:
-           (nimi,ra,de,ptr)=kohdeluettelo.readndx(l)
-           tiedot(nimi,ra,de,ptr)
-           (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
-           aja(ra_now,de_now)
-        if komento[0]=='?':
+        if komento!="":
+           l=kohdeluettelo.searchndx(komento)
+           if l>-1:
+             (nimi,ra,de,ptr)=kohdeluettelo.readndx(l)
+             tiedot(nimi,ra,de,ptr)
+             (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
+             aja(ra_now,de_now)
+        if komento=='?':
           k=komento[1:].strip()
           l=-1
           if len(k)>0:
@@ -282,18 +285,22 @@ def main(stdscr):
              tiedot(nimi,ra,de,l)
           elif nimi!="":
            tiedot(nimi,ra,de,-1)
-        (nimi,ra,de,l) = kohde(komento)
-        if(nimi!=""):
-          tiedot(nimi,ra,de,l)
-          (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
-          aja(ra_now,de_now)
+        if komento != "":
+           (nimi,ra,de,l) = kohde(komento)
+           if(nimi!=""):
+            tiedot(nimi,ra,de,l)
+            (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
+            aja(ra_now,de_now)
     #telescope.disconnect()
 
 def save_tpoint():
   global t,tf
   if(tf==None): 
-    tf=open("rade_tpoint.dat","w",buffering=1)
+    tf=open("pyrade_tpoint.dat","w",buffering=1)
     tf.write("pyrade\n")
+    tf.write(":EQUAT\n")
+    tf.write(":J2000\n")
+
     ut=datetime.utcnow()
     pvm=ut.strftime('%Y %m %d')
     #62 13 01.2 2025 4 1 0 1000 100 0.5 0.55
