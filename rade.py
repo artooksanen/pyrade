@@ -7,6 +7,7 @@ import hor
 import planets
 import telescope
 import epoch
+import re
 
 screen=curses.initscr()
 lwhite=1
@@ -232,15 +233,21 @@ def kohde(s):
      nimi="KUU"
      ra,de=planets.moon(t)
      ra,de=epoch.precess(ra,de,year,2000.0)
-   elif s=="ETELA":
+   elif s[0:4]=="ETEL" or s=="ET":
      nimi="ETELA"
      ra,de=hor.hortoeq(180.0,0.0,t)
+   elif s[0:3]=="HOR":
+      nimi=s
+      ats=float(re.split("%*[^0-9.]",s.split()[1])[0])
+      kor=float(re.split("%*[^0-9.]",s.split()[1])[1])
+      ra,de=hor.hortoeq(ats,kor,t)
    return (nimi,ra,de,-1)
 
 def main(stdscr):
     ptr=0
     # Clear screen
     screen=stdscr
+    #curses.resize_term(24, 80)
     update_screen()
     telescope.connect()
 #    prompt("KOMENTO")
@@ -256,10 +263,10 @@ def main(stdscr):
       else:
         if len(komento.split())>1:
             if komento.split()[0]=="P" or komento.split()[0] == "PERUS":        
-              k=komento.split()[1].strip()
+              k=komento[len(komento.split()[0])+1:]
               (nimi,ra,de,l) = kohde(k)
               tiedot(nimi,ra,de,l)
-              printrs(3,10,red,blue,"** asteteaan koordinaatit **       "+k)
+              printrs(3,10,red,blue,"** aseteteaan koordinaatit **       "+k)
               (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
               telescope.sync(ra_now,de_now)
               komento=""
