@@ -4,12 +4,14 @@ import array
 from alpaca.camera import *     # Sorry Python purists, this has multiple required Classes
 import numpy as np
 import astropy.io.fits as fits
+import sys
 
 def take_image(target_name,exposure_time,ra,de,pixel_scale):
 #
 # Set up the camera
 #
-    c = Camera('192.168.8.103:11111', 0)    # Connect to the ALpaca Omni Simulator
+#    c = Camera('192.168.8.103:11111', 0)    # Connect to the ALpaca Omni Simulator
+    c = Camera('127.0.0.1:11111', 0)    # Connect to the ASI camera
     c.Connected = True
     c.BinX = 1
     c.BinY = 1
@@ -21,11 +23,17 @@ def take_image(target_name,exposure_time,ra,de,pixel_scale):
 #
 # Acquire a light image, wait while printing % complete
 #
+    print('Exposing ',exposure_time,"seconds")
     c.StartExposure(exposure_time, True)
     while not c.ImageReady:
-        time.sleep(1.0)
-#        print(f'{c.PercentCompleted}% complete')
-    print('finished')
+      sys.stdout.write(".")
+      sys.stdout.flush()
+      time.sleep(1.0)
+#    print(f'{c.PercentCompleted}% complete')
+#    print('.',end="")
+    
+    print('\nfinished')
+
 #
 # OK image acquired, grab the image array and the metadata
 #
@@ -56,8 +64,8 @@ def take_image(target_name,exposure_time,ra,de,pixel_scale):
     if imgDataType ==  np.uint16:
         hdr['BZERO'] = 32768.0
         hdr['BSCALE'] = 1.0
-    hdr['EXPOSURE'] = c.LastExposureDuration
-    hdr['EXPTIME'] = c.LastExposureDuration
+    hdr['EXPOSURE'] = exposure_time
+    hdr['EXPTIME'] = exposure_time
     #hdr['DATE-OBS'] = c.LastExposureStartTime
     hdr['TIMESYS'] = 'UTC'
     hdr['XBINNING'] = c.BinX

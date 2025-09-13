@@ -8,6 +8,7 @@ import planets
 import telescope
 import epoch
 import re
+import sexadecimal
 
 screen=curses.initscr()
 lwhite=1
@@ -55,9 +56,8 @@ def input():
   return input 
 
 def get_coord():
-  r=telescope.rightascension()
-  d=telescope.declination()
-  return (r,d)
+  r,d,rcounter,dcounter=telescope.get_coordinates()
+  return (r,d,rcounter,dcounter)
 
 def aja(r,d):
   printrs(3,10,red,blue,"**ajetaan kohteeseen**                            ")
@@ -103,7 +103,7 @@ def update_screen():
 
 def update_coord(i):
   global t
-  (ra,de)=get_coord()                        # luetaan koordinaatit
+  (ra,de,rcounter,dcounter)=get_coord()                        # luetaan koordinaatit
   (ra1,de1)=epookki(ra,de,epookkinyt,epookki0)
   h=hms.rh(ra1)
   m=hms.rm(ra1)
@@ -115,6 +115,8 @@ def update_coord(i):
   printrs(14,5,yellow,blue,"{}{:02d} {:02d}".format(s,d,m))
   (ats,kor)=hor.atkor(ra,de,t)
   printrs(26,5,yellow,blue,"{:5.1f}  {:4.1f}".format(ats,kor))
+  printrs(10,27,yellow,blue,"{:10d}  {:10d}".format(rcounter,dcounter))
+  
 
 def tiedot(nimi,r,d,ptr):
    printrs(3,10,red,blue,"tiedot kohteesta                            ")
@@ -175,12 +177,12 @@ def komennot():
    printrs(17,15,white,blue,"tietoja kohteesta")
    printrs(3,16,lwhite,blue,"?nimi")
    printrs(17,16,white,blue,"tietoja kohteesta")
-   printrs(3,17,lwhite,blue,"EPOOKKI vuosi")
-   printrs(17,17,white,blue,"koordinaattiepookin asetus")
-   printrs(3,18,lwhite,blue,"SELAA")
-   printrs(17,18,white,blue,"kohdeluettelon selaus")
-   printrs(3,19,lwhite,blue,"OMAT tiedosto")
-   printrs(17,19,white,blue,"lisäkohdeluettelo")
+   #printrs(3,17,lwhite,blue,"EPOOKKI vuosi")
+   #printrs(17,17,white,blue,"koordinaattiepookin asetus")
+   #printrs(3,18,lwhite,blue,"SELAA")
+   #printrs(17,18,white,blue,"kohdeluettelon selaus")
+   #printrs(3,19,lwhite,blue,"OMAT tiedosto")
+   #printrs(17,19,white,blue,"lisäkohdeluettelo")
    printrs(3,20,lwhite,blue,"LOPETUS")
    printrs(17,20,white,blue,"ohjelman lopetus")
 
@@ -241,6 +243,12 @@ def kohde(s):
       ats=float(re.split("%*[^0-9.]",s.split()[1])[0])
       kor=float(re.split("%*[^0-9.]",s.split()[1])[1])
       ra,de=hor.hortoeq(ats,kor,t)
+   elif s[0].isnumeric():
+      nimi=s
+      ra,de=sexadecimal.parse(s)
+      if ra == None or de == None:
+         ra=0.0
+         de=0.0
    return (nimi,ra,de,-1)
 
 def main(stdscr):

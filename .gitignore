@@ -5,3 +5,4 @@ m67_solved_with_twirl.fits
 solved_with_twirl.fits
 solved_with_astrometrynet.fits
 .gitignore
+*.fit

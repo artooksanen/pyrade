@@ -15,7 +15,7 @@ def read_int(f):
 
 def searchndx(nimi):
 #   print("Searching...")
-   a=-1
+   a=0
    b=15984
    l=-1
    n=0

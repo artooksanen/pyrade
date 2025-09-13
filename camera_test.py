@@ -4,11 +4,14 @@ import array
 from alpaca.camera import *     # Sorry Python purists, this has multiple required Classes
 import numpy as np
 import astropy.io.fits as fits
+import sys
 
 #
 # Set up the camera
 #
-c = Camera('192.168.8.103:11111', 0)    # Connect to the ALpaca Omni Simulator
+#c = Camera('192.168.8.103:11111', 0)    # Connect to the ALpaca Omni Simulator
+c = Camera('127.0.0.1:11111', 0)    # Connect to the ASI camera via ASCOM Remote
+
 c.Connected = True
 c.BinX = 1
 c.BinY = 1
@@ -20,11 +23,17 @@ c.NumY = c.CameraYSize // c.BinY
 #
 # Acquire a light image, wait while printing % complete
 #
-c.StartExposure(20.0, True)
+LastExposureDuration=10.0
+print('Exposing ',LastExposureDuration,"seconds")
+c.StartExposure(LastExposureDuration, True)
 while not c.ImageReady:
-    time.sleep(0.5)
-    print(f'{c.PercentCompleted}% complete')
-print('finished')
+    sys.stdout.write(".")
+    sys.stdout.flush()
+    time.sleep(1.0)
+#    print(f'{c.PercentCompleted}% complete')
+#    print('.',end="")
+    
+print('\nfinished')
 #
 # OK image acquired, grab the image array and the metadata
 #
@@ -55,8 +64,8 @@ hdr['COMMENT'] = 'FITS Definition document #100 and other FITS information.'
 if imgDataType ==  np.uint16:
     hdr['BZERO'] = 32768.0
     hdr['BSCALE'] = 1.0
-hdr['EXPOSURE'] = c.LastExposureDuration
-hdr['EXPTIME'] = c.LastExposureDuration
+hdr['EXPOSURE'] = LastExposureDuration
+hdr['EXPTIME'] = LastExposureDuration
 #hdr['DATE-OBS'] = c.LastExposureStartTime
 hdr['TIMESYS'] = 'UTC'
 hdr['XBINNING'] = c.BinX
@@ -78,7 +87,7 @@ hdr['HISTORY'] = 'Created using Python alpyca-client library'
 #
 hdu = fits.PrimaryHDU(nda, header=hdr)
 
-img_file = f"{os.getenv('USERPROFILE')}/Desktop/test.fts"
+img_file = "camera_test.fts"
 hdu.writeto(img_file, overwrite=True)
 c.Connected = False
 

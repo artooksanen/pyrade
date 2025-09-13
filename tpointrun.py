@@ -31,7 +31,7 @@ for a in range(0,360,45):
             print("taking image...")
             ra=telescope.rightascension()
             dec=telescope.declination()
-            img_file=camera.take_image(60,ra,dec,pixel_scale=0.80)
+            img_file=camera.take_image(f'point{a}+{e}',20,ra,dec,pixel_scale=0.80)
             ta=hor.taika(t)
             print("solving...")
             r2000,d2000=epoch.precess(ra,dec,2025.5,2000.0)

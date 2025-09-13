@@ -1,0 +1,34 @@
+emulaattorikortti (pulser)
+
+ 0
+ 1
+ 2
+ 3 kelt x speed low in
+ 4 vihr x speed high in
+ 5 sini y speed low in
+ 6 viol y speed high in
+ 7 puna y direction out
+ 8 rusk x direction out
+ 9 valk x direction in
+10 must y direction in
+11 valk x pulse out
+12 must y pulse out
+
+laskurikortti (counter) vanha
+
+ 0
+ 1
+ 2 valk x direction out
+ 3 must y direction out
+ 4 kelt x speed low out
+ 5 vihr x speed high out
+ 6 sini y speed low out
+ 7 viol y speed high out
+ 8 puna y direction in
+ 9 rusk x direction in
+10 valk x pulse in
+11 must y pulse in
+
+
+
+

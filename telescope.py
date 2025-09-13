@@ -55,6 +55,35 @@ def tracking():
 def abort():
   T.AbortSlew()
 
+def get_coordinates():
+  global ra,de 
+  try:
+    ds=T.DeviceState
+    #print(ds)
+    for k in ds:
+      #print(k)
+      #print(k["Name"])
+      #print(k["Value"])
+      if k["Name"]=="RightAscension":
+        r=k["Value"]      
+      if k["Name"]=="Declination":
+        d=k["Value"]      
+      if k["Name"]=="RACounter":
+        ra_counter=k["Value"]      
+      if k["Name"]=="DecCounter":
+        de_counter=k["Value"]      
+
+    t=hor.ttojd(time.time())
+    ta=hor.taika(t)
+    h=(ta-r)*15.0 #degrees
+    (h1,d1)=tpoint.corrected(radians(h),radians(d))
+    ra=ta-degrees(h1)/15.0
+    de=degrees(d1)
+  except requests.exceptions.Timeout:
+    print("Timeout occurred receiving telescipe state")
+  finally:
+    return ra,de,ra_counter,de_counter  
+
 def rightascension():
   global ra 
   try:
@@ -102,3 +131,8 @@ def sync(r,d):
 def disconnect():
    print("Disconnecting...")
    #T.Connected=False
+
+if __name__ == '__main__':
+
+  connect()
+  print(get_coordinates())
