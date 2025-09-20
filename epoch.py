@@ -34,10 +34,9 @@ def precess(rin, din, ein, eout):
 
 
 if __name__ == '__main__':
-    ra=11.076857359492635
-    de=6.855224313947309
-    print("ra_date=",ra,"de_date=",de)
-    ra_2000,de_2000=precess(ra,de,2025.5,2000.0)
+    ra_2000=19+50/60.0+48/3600
+    de_2000=8+52/60
+
     print("ra_2000=",ra_2000,"de_2000=",de_2000)
     ra_now,de_now=precess(ra_2000,de_2000,2000.0,2025.5)
     print("ra_date=",ra_now,"de_date=",de_now)

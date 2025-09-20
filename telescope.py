@@ -57,6 +57,8 @@ def abort():
 
 def get_coordinates():
   global ra,de 
+  ra_counter=0
+  de_counter=0
   try:
     ds=T.DeviceState
     #print(ds)

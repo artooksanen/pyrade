@@ -14,8 +14,8 @@ def read_int(f):
     return struct.unpack('i', s)[0]
 
 def searchndx(nimi):
-#   print("Searching...")
-   a=0
+   #print("Searching...")
+   a=-1
    b=15984
    l=-1
    n=0
@@ -23,7 +23,7 @@ def searchndx(nimi):
      n=n+1
      c=(a+b)//2
      (text,ra,de,ptr)=readndx(c)
-#     print(f"tietue {c}: {text}")
+     #print(f"tietue {c}: {text}")
      if(text<nimi):
         a=c
      if(text>nimi):
@@ -31,11 +31,11 @@ def searchndx(nimi):
      if(text==nimi):
        a=b=c
        l=c
-#     print(a,b,c)
-#   if(l>-1):
-#       print(f"tietue {c}: {text} ra:{ra:.4f} de:{de:.4f} ptr:{ptr}")
-#   else:
-#       print(f"ei löytynyt: {nimi}")
+     #print(a,b,c)
+   #if(l>-1):
+   #    print(f"tietue {c}: {text} ra:{ra:.4f} de:{de:.4f} ptr:{ptr}")
+   #else:
+   #    print(f"ei löytynyt: {nimi}")
    return(l)
 
 def readndx(c):
@@ -60,14 +60,14 @@ def readdata(row):
       d.seek(offset)
       data=""
       data=d.read(65)
-#      print(data)
+      #print(data)
       n=0
       while(data[n]>0 or n==65):
          n=n+1
       data=data[0:n].decode("utf-8")
       ptr=read_int(d)
-#      print(data)
-#      print(ptr)
+      #print(data)
+      #print(ptr)
       return((data,ptr))
 
 
