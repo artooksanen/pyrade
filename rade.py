@@ -238,11 +238,16 @@ def kohde(s):
    elif s[0:4]=="ETEL" or s=="ET":
      nimi="ETELA"
      ra,de=hor.hortoeq(180.0,0.0,t)
-   elif s[0:3]=="HOR":
+     ra,de=epoch.precess(ra,de,year,2000.0)
+   elif s[0:3]=="HOR" and len(s.split(" "))>1:
       nimi=s
-      ats=float(re.split("%*[^0-9.]",s.split()[1])[0])
-      kor=float(re.split("%*[^0-9.]",s.split()[1])[1])
-      ra,de=hor.hortoeq(ats,kor,t)
+      try:
+        ats=float(re.split("%*[^0-9.]",s.split()[1])[0])
+        kor=float(re.split("%*[^0-9.]",s.split()[1])[1])
+        ra,de=hor.hortoeq(ats,kor,t)
+      except Exception:
+        ra=de=0.0
+      ra,de=epoch.precess(ra,de,year,2000.0)
    elif s[0].isnumeric():
       nimi=s
       ra,de=sexadecimal.parse(s)
@@ -277,7 +282,7 @@ def main(stdscr):
               printrs(3,10,red,blue,"** aseteteaan koordinaatit **       "+k)
               (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
               telescope.sync(ra_now,de_now)
-              komento=""
+              #komento=""
               nimi=""
         if komento=="LO":
            telescope.disconnect()
