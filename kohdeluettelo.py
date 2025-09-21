@@ -19,7 +19,7 @@ def searchndx(nimi):
    b=15984
    l=-1
    n=0
-   while((a!=b) and (n<20)):
+   while((a!=b) and (n<20) and (b>0)):
      n=n+1
      c=(a+b)//2
      (text,ra,de,ptr)=readndx(c)

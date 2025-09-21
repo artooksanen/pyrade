@@ -183,8 +183,8 @@ def komennot():
    #printrs(17,18,white,blue,"kohdeluettelon selaus")
    #printrs(3,19,lwhite,blue,"OMAT tiedosto")
    #printrs(17,19,white,blue,"lisäkohdeluettelo")
-   printrs(3,20,lwhite,blue,"LOPETUS")
-   printrs(17,20,white,blue,"ohjelman lopetus")
+   printrs(3,17,lwhite,blue,"LOPETUS")
+   printrs(17,18,white,blue,"ohjelman lopetus")
 
 def kohde(s):
    ut=datetime.utcnow()
@@ -291,7 +291,7 @@ def main(stdscr):
              tiedot(nimi,ra,de,ptr)
              (ra_now,de_now)=epookki(ra,de,epookki0,epookkinyt)
              aja(ra_now,de_now)
-        if komento=='?':
+        if komento[0]=='?' and len(komento)>1:
           k=komento[1:].strip()
           l=-1
           if len(k)>0:
