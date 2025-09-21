@@ -71,7 +71,7 @@ def printrs(c,r,col1,col2,s):
 
 def update_time(j):
    global t
-   ut=datetime.utcnow()
+   ut=datetime.now(timezone.utc)
    lt=datetime.now()
    printrs(56,3,lwhite,blue,lt.strftime('%d.%m.%Y %H:%M:%S'))
    printrs(56,4,lwhite,blue,ut.strftime('%d.%m.%Y %H:%M:%S'))
@@ -184,10 +184,10 @@ def komennot():
    #printrs(3,19,lwhite,blue,"OMAT tiedosto")
    #printrs(17,19,white,blue,"lisäkohdeluettelo")
    printrs(3,17,lwhite,blue,"LOPETUS")
-   printrs(17,18,white,blue,"ohjelman lopetus")
+   printrs(17,17,white,blue,"ohjelman lopetus")
 
 def kohde(s):
-   ut=datetime.utcnow()
+   ut=datetime.now(timezone.utc)
    year=ut.year
    nimi=""
    ra=de=0.0
@@ -272,7 +272,10 @@ def main(stdscr):
            telescope.abort()
            printrs(3,10,red,blue,"** ajo keskeytetty **                            ")
       if len(komento)==0:
-         komennot()
+        update_screen()
+        update_time(1)
+        update_coord(1)
+        komennot()
       else:
         if len(komento.split())>1:
             if komento.split()[0]=="P" or komento.split()[0] == "PERUS":        
