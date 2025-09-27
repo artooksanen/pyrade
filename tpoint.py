@@ -1,6 +1,7 @@
 from math import *
 
 IH=ID=NP=CH=MA=ME=0
+modelname=None
 
 def sec(x):
     return 1.0/cos(x) 
@@ -78,7 +79,7 @@ def corrected(h,d):
       return (ht,dt)
 
 
-#read_model('tpoint-model.dat')
+#read_model('rihlapera_pointingmodel.dat')
 
 if __name__=="__main__":
 

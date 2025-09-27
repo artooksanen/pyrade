@@ -9,6 +9,7 @@ import telescope
 import epoch
 import re
 import sexadecimal
+import omat
 
 screen=curses.initscr()
 lwhite=1
@@ -181,12 +182,14 @@ def komennot():
    #printrs(17,17,white,blue,"koordinaattiepookin asetus")
    #printrs(3,18,lwhite,blue,"SELAA")
    #printrs(17,18,white,blue,"kohdeluettelon selaus")
-   #printrs(3,19,lwhite,blue,"OMAT tiedosto")
-   #printrs(17,19,white,blue,"lisäkohdeluettelo")
-   printrs(3,17,lwhite,blue,"LOPETUS")
-   printrs(17,17,white,blue,"ohjelman lopetus")
+   printrs(3,17,lwhite,blue,"OMAT tiedosto")
+   printrs(17,17,white,blue,"lisäkohdeluettelo")
+   printrs(3,18,lwhite,blue,"LOPETUS")
+   printrs(17,18,white,blue,"ohjelman lopetus")
 
 def kohde(s):
+   if omat.hae(s) is not None:
+     s=omat.hae(s)
    ut=datetime.now(timezone.utc)
    year=ut.year
    nimi=""
@@ -264,8 +267,12 @@ def main(stdscr):
     update_screen()
     telescope.connect()
 #    prompt("KOMENTO")
+
+    omat.lue("omat.dat")
+ 
     screen.nodelay(True)
     stdscr.refresh()
+
     while True:
       komento=input().upper()
       if telescope.slewing():
@@ -287,6 +294,9 @@ def main(stdscr):
               telescope.sync(ra_now,de_now)
               #komento=""
               nimi=""
+            if komento.split()=="OMAT":
+               t=k=komento[len(komento.split()[0])+1:]
+               omat.lue(t)
         if komento=="LO":
            telescope.disconnect()
            break
@@ -336,7 +346,7 @@ def save_tpoint():
   (r0_2000,d0_2000)=epoch.precess(r0,d0,epookkinyt,2000.0)
 
   buffer="{:02d} {:02d} {:02.1f} {:s}{:02d} {:02d} {:02d}.0 {:02d} {:02d} {:02.1f} {:s}{:02d} {:02d} {:02d}.0 {:02d} {:02d}\n".format(
-         hms.rh(r1_2000),hms.rm(r1_2000),hms.rsd(r1_2000),hms.ds(d1_2000),hms.da(d1_2000),hms.dm(d1_2000),hms.dss(1_2000),
+         hms.rh(r1_2000),hms.rm(r1_2000),hms.rsd(r1_2000),hms.ds(d1_2000),hms.da(d1_2000),hms.dm(d1_2000),hms.dss(d1_2000),
          hms.rh(r0_2000),hms.rm(r0_2000),hms.rsd(r0_2000),hms.ds(d0_2000),hms.da(d0_2000),hms.dm(d0_2000),hms.dss(d0_2000),
          hms.rh(ta),hms.rm(ta))
   if(tf):
