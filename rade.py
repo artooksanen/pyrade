@@ -11,6 +11,8 @@ import re
 import sexadecimal
 import omat
 
+global komento
+komento=""
 screen=curses.initscr()
 lwhite=1
 blue=2
@@ -45,10 +47,10 @@ def input():
         last_second=now_second
         if telescope.slewing():
            nopea=True
-           printrs(3,10,red,blue,"**ajetaan kohteeseen**                            ")
+           printrs(3,10,red,blue,"*** ajetaan kohteeseen - keskeytys enterillä ***                 ")
         else:
            nopea=False
-           printrs(3,10,red,blue,"                                                  ")
+           printrs(3,10,red,blue,"                                                                 ")
    
       printrs(3,8,lwhite,blue,input);
       c = screen.getch()
@@ -58,7 +60,9 @@ def input():
          printrs(3,27,white,blue, "{:d}   ".format(c))
       if c == 10: # return
            break
-      if c > 0:
+      if c == 259: # ylänuoli
+        input=komento
+      elif c > 0:
         if(c == 263 or c==330 or c==8 or c==260):
          input=input[:-1]
         else:
@@ -72,7 +76,7 @@ def get_coord():
   return (r,d,rcounter,dcounter)
 
 def aja(r,d):
-  printrs(3,10,red,blue,"**ajetaan kohteeseen**                            ")
+  printrs(3,10,red,blue,"*** ajetaan kohteeseen - keskeytys enterillä ***                 ")
   telescope.slew(r,d)
 
 def epookki(r,d,e1,e2):
@@ -271,6 +275,7 @@ def kohde(s):
    return (nimi,ra,de,-1)
 
 def main(stdscr):
+    global komento
     ptr=0
     # Clear screen
     screen=stdscr
@@ -289,7 +294,7 @@ def main(stdscr):
       if telescope.slewing():
            telescope.abort()
            printrs(3,10,red,blue,"** ajo keskeytetty **                            ")
-      if len(komento)==0:
+      elif len(komento)==0:
         update_screen()
         update_time(1)
         update_coord(1)
