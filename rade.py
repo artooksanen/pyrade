@@ -28,15 +28,26 @@ def input():
   input=""
   gotorc(8,3)
   screen.clrtoeol()
+  nopea=False
+  last_time=datetime.now()
   while True:
-      now_second=datetime.now().second
+      now=datetime.now()
+      now_second=now.second
+      if nopea:
+        delta=(now-last_time).seconds+(now-last_time).microseconds/1000000
+        #printrs(60,27,lwhite,blue,"{:f}   ".format(delta));
+        if delta>0.1: # 0.1 s
+          last_time=now
+          update_coord(1)
       if now_second!=last_second:
         update_time(1)
         update_coord(1)
         last_second=now_second
         if telescope.slewing():
+           nopea=True
            printrs(3,10,red,blue,"**ajetaan kohteeseen**                            ")
         else:
+           nopea=False
            printrs(3,10,red,blue,"                                                  ")
    
       printrs(3,8,lwhite,blue,input);

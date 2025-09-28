@@ -1,7 +1,7 @@
 kohteet={}
 
 def lue(filename):
-    f = open(filename, 'r')
+    f = open(filename, 'r', encoding="utf-8")
     kohteet.clear()
     for line in f.read().splitlines():
         if len(line.split(" ",1)) > 1:
