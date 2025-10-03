@@ -314,6 +314,8 @@ def main(stdscr):
                t=k=komento[len(komento.split()[0])+1:]
                omat.lue(t)
         if komento=="LO":
+           (ra_now,de_now,rcounter,dcounter)=get_coord()                        # luetaan ja tallennetaan koordinaatit
+           telescope.sync(ra_now,de_now)
            telescope.disconnect()
            break
         if komento=="TPOINT":
