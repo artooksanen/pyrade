@@ -1,5 +1,7 @@
 /.vs
 /__pycache__
+/build
+/dist
 solve.py
 m67_solved_with_twirl.fits
 solved_with_twirl.fits
